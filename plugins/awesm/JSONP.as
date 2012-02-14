@@ -1,4 +1,4 @@
-package lib
+package
 {
   /* 
   * AS3 Wrapper for jsonp

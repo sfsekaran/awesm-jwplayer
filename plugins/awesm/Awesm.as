@@ -25,7 +25,7 @@ package {
 		public function initPlugin(player:IPlayer, conf:PluginConfig):void {
 			api = player;
 			config = conf;
-			awesmApiKey = conf.apiKey;
+			awesmApiKey = config.apiKey;
 			awesmId = api.config.awesm; // grab from flashvars;
 
 			// Listen for play position callbacks.
@@ -56,33 +56,21 @@ package {
 
 		private function recordAwesmConversion():void {
 			if (alreadyRecordedThisPlay) return;
+			alreadyRecordedThisPlay = true;
 
-			// make the call to awesm
-			var http:HTTPService = new HTTPService();
+			Logger.log('Beginning conversion call...', 'Awesm');
 
-			// register event handlers (resultHandler and faultHandler functions)
-			http.addEventListener( ResultEvent.RESULT, resultHandler );
-			http.addEventListener( FaultEvent.FAULT, faultHandler );
+			JSONP.get("http://api.awe.sm/conversions/new",
+				"{key: '" + awesmApiKey + "', awesm_id: '" + awesmId + "', conversion_type: 'goal_3', conversion_value: 1}",
+				resultHandler);
 
-			// specify the url to request, the method and result format
-			http.url = "http://api.awe.sm/conversions/new";
-			http.method = "GET";
-			http.resultFormat = "text";
-
-			var params:Object = { key: awesmApiKey, awesm_id: awesmId, conversion_type: 'goal_3', conversion_value: 1 };
-
-			// send the request
-			http.send(params);
+			Logger.log('Conversion call sent...', 'Awesm');
 		}
 
-		private function resultHandler(event:ResultEvent):void {
+		private function resultHandler(results:Object):void {
 			// var result:Object = eval(event.result);
 			Logger.log('Play conversion successful.', 'Awesm');
-			Logger.log(event.result, 'Awesm');
-		}
-
-		private function faultHandler(event:FaultEvent):void {
-			Logger.log('Play conversion failed.', 'Awesm');
+			Logger.log(results, 'Awesm');
 		}
 	}
 }
