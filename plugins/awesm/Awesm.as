@@ -75,7 +75,7 @@ package {
 		private function resultHandler(results:Object):void {
 			// var result:Object = eval(event.result);
 			Logger.log('Play conversion successful.', 'Awesm');
-			Logger.log(results, 'Awesm');
+			Logger.log('Conversion id: ' + results.response.conversion.id, 'Awesm');
 		}
 	}
 }
