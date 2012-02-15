@@ -25,8 +25,10 @@ package {
 		public function initPlugin(player:IPlayer, conf:PluginConfig):void {
 			api = player;
 			config = conf;
-			awesmApiKey = config.apiKey;
-			awesmId = api.config.awesm; // grab from flashvars;
+			awesmApiKey = conf.apikey;
+			awesmId = player.config.awesm;
+			Logger.log('apikey: ' + awesmApiKey, 'Awesm');
+			Logger.log('id: ' + awesmId, 'Awesm');
 
 			// Listen for play position callbacks.
 			api.addEventListener(MediaEvent.JWPLAYER_MEDIA_TIME, playPosition);
@@ -48,7 +50,7 @@ package {
 			if (alreadyRecordedThisPlay) return;
 
 			var fraction:Number = (event.position / event.duration);
-			Logger.log("Play percentage: " + fraction * 100, 'Awesm');
+			// Logger.log("Play percentage: " + fraction * 100, 'Awesm');
 			if (fraction >= 0.2) {
 				recordAwesmConversion();
 			}
@@ -60,8 +62,11 @@ package {
 
 			Logger.log('Beginning conversion call...', 'Awesm');
 
+			var json:String = "{key: '" + awesmApiKey + "', awesm_url: '" + awesmId + "', conversion_type: 'goal_3', conversion_value: 1}";
+			Logger.log('Params to send to awesm: ' + json, 'Awesm');
+
 			JSONP.get("http://api.awe.sm/conversions/new",
-				"{key: '" + awesmApiKey + "', awesm_id: '" + awesmId + "', conversion_type: 'goal_3', conversion_value: 1}",
+				json,
 				resultHandler);
 
 			Logger.log('Conversion call sent...', 'Awesm');

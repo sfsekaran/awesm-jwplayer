@@ -11,19 +11,9 @@
 
 	<flashvars>
 		<flashvar>
-			<name>position</name>
-			<default>over</default>
-			<description>Position of the plugin. Can be "over", "left", "right", "top" or "bottom".</description>
-		</flashvar>
-		<flashvar>
-			<name>size</name>
-			<default>100</default>
-			<description>Width or height of the plugin when not over the display.</description>
-		</flashvar>
-		<flashvar>
-			<name>text</name>
-			<default>Hello, world</default>
-			<description>Text to add to display.</description>
+			<name>apikey</name>
+			<default>8b87d24604bb1d6af91b2e082e9e83e3c9a9aa215f00330dae8be777392c07d1</default>
+			<description>The awe.sm api key whose awesm_ids will receive conversion calls.</description>
 		</flashvar>
 	</flashvars>
 </plugin>

@@ -60,6 +60,15 @@ var settings = {
 			playlistsize:400
 		},
 		' ': {
+    },
+    'Awesm Plugin': {
+      file:'../files/bunny.flv',
+      image:'files/bunny.jpg',
+      plugins:'awesm',
+      debug:'console',
+      'awesm.apikey':'8b87d24604bb1d6af91b2e082e9e83e3c9a9aa215f00330dae8be777392c07d1', // Ziggy Marley (Preprod)
+      height:240,
+      width:400
 		},
 		'Using a Player 5 Plugin': {
 			file:'../files/bunny.flv',
