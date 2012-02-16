@@ -6,7 +6,6 @@ package {
 	import com.longtailvideo.jwplayer.events.*;
 	import mx.rpc.http.*;
 	import mx.rpc.events.*;
-	import JSONP;
 
 	public class Awesm extends Sprite implements IPlugin {
 
@@ -62,20 +61,33 @@ package {
 
 			Logger.log('Beginning conversion call...', 'Awesm');
 
-			var json:String = "{key: '" + awesmApiKey + "', awesm_url: '" + awesmId + "', conversion_type: 'goal_3', conversion_value: 1}";
-			Logger.log('Params to send to awesm: ' + json, 'Awesm');
+			// make the call to awesm
+			var http:HTTPService = new HTTPService();
 
-			JSONP.get("http://api.awe.sm/conversions/new",
-				json,
-				resultHandler);
+			// register event handlers (resultHandler and faultHandler functions)
+			http.addEventListener( ResultEvent.RESULT, resultHandler );
+			http.addEventListener( FaultEvent.FAULT, faultHandler );
+
+			// specify the url to request, the method and result format
+			http.url = "http://api.awe.sm/conversions/new";
+			http.method = "GET";
+			http.resultFormat = "text";
+
+			var params:Object = { key: awesmApiKey, awesm_key: awesmId, conversion_type: 'goal_3', conversion_value: 1 };
+
+			// send the request
+			http.send(params);
 
 			Logger.log('Conversion call sent...', 'Awesm');
 		}
 
-		private function resultHandler(results:Object):void {
-			// var result:Object = eval(event.result);
+		private function resultHandler(event:ResultEvent):void {
 			Logger.log('Play conversion successful.', 'Awesm');
-			Logger.log('Conversion id: ' + results.response.conversion.id, 'Awesm');
+			Logger.log(event.result, 'Awesm');
+		}
+
+		private function faultHandler(event:FaultEvent):void {
+			Logger.log('Play conversion failed.', 'Awesm');
 		}
 	}
 }
