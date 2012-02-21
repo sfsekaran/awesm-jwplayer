@@ -2,6 +2,7 @@ require 'fileutils'
 
 task :default => [:build]
 
+desc 'Build awesm.swf'
 task :build do
   puts 'Compiling awesm.swf...'
   puts ''
