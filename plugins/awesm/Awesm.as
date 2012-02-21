@@ -16,7 +16,7 @@ package {
 		/** Awesm API key **/
 		private var awesmApiKey:String;
 		/** Awesm ID **/
-		private var awesmId:String;
+		private var awesmUrl:String;
 		/** Already recorded semaphore variable **/
 		private var alreadyRecordedThisPlay:Boolean = false;
 
@@ -25,12 +25,14 @@ package {
 			api = player;
 			config = conf;
 			awesmApiKey = conf.apikey;
-			awesmId = player.config.awesm;
+			awesmUrl = player.config.awesm;
 			Logger.log('apikey: ' + awesmApiKey, 'Awesm');
-			Logger.log('id: ' + awesmId, 'Awesm');
+			Logger.log('id: ' + awesmUrl, 'Awesm');
 
 			// Listen for play position callbacks.
 			api.addEventListener(MediaEvent.JWPLAYER_MEDIA_TIME, playPosition);
+			// and media loaded callbacks to reset the alreadyRecordedThisPlay variable
+			api.addEventListener(MediaEvent.JWPLAYER_MEDIA_LOADED, mediaLoaded);
 		}
 
 		/** This should be a unique, lower-case identifier (e.g. "myplugin") **/
@@ -44,6 +46,8 @@ package {
 		}
 
 		/* Private */
+
+		private function mediaLoaded(event:MediaEvent):void { alreadyRecordedThisPlay = false; }
 
 		private function playPosition(event:MediaEvent):void {
 			if (alreadyRecordedThisPlay) return;
@@ -73,7 +77,7 @@ package {
 			http.method = "GET";
 			http.resultFormat = "text";
 
-			var params:Object = { key: awesmApiKey, awesm_key: awesmId, conversion_type: 'goal_3', conversion_value: 1 };
+			var params:Object = { key: awesmApiKey, awesm_url: awesmUrl, conversion_type: 'goal_3', conversion_value: 1 };
 
 			// send the request
 			http.send(params);
